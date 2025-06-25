@@ -44,7 +44,39 @@ public class MenuService {
     public MenuItem addMenuItem(String name, String description, double price, String category, String imageUrl) {
         MenuItem item = new MenuItem(nextId++, name, description, price, category, imageUrl);
         menuItems.add(item);
+
+        System.out.println("✅ New menu item added: " + name + " (ID: " + item.getId() + ")");
+        System.out.println("📋 Total menu items: " + menuItems.size());
         return item;
+    }
+
+    // Delete a menu item
+    public boolean deleteMenuItem(int itemId) {
+        Optional<MenuItem> item = getMenuItemById(itemId);
+        if (item.isPresent()) {
+            menuItems.removeIf(menuItem -> menuItem.getId() == itemId);
+            System.out.println("🗑️ Menu item deleted: " + item.get().getName() + " (ID: " + itemId + ")");
+            System.out.println("📋 Total menu items: " + menuItems.size());
+            return true;
+        }
+        return false;
+    }
+
+    // Update a menu item
+    public boolean updateMenuItem(int itemId, String name, String description, double price, String category, String imageUrl) {
+        Optional<MenuItem> existingItem = getMenuItemById(itemId);
+        if (existingItem.isPresent()) {
+            MenuItem item = existingItem.get();
+            if (name != null) item.setName(name);
+            if (description != null) item.setDescription(description);
+            if (price > 0) item.setPrice(price);
+            if (category != null) item.setCategory(category);
+            if (imageUrl != null) item.setImageUrl(imageUrl);
+
+            System.out.println("✏️ Menu item updated: " + item.getName() + " (ID: " + itemId + ")");
+            return true;
+        }
+        return false;
     }
 
     // Get all menu items
@@ -84,19 +116,7 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
 
-    // Update menu item
-    public boolean updateMenuItem(int id, String name, String description, double price, String category) {
-        Optional<MenuItem> item = getMenuItemById(id);
-        if (item.isPresent()) {
-            MenuItem menuItem = item.get();
-            if (name != null) menuItem.setName(name);
-            if (description != null) menuItem.setDescription(description);
-            if (price > 0) menuItem.setPrice(price);
-            if (category != null) menuItem.setCategory(category);
-            return true;
-        }
-        return false;
-    }
+
 
     // Toggle menu item availability
     public boolean toggleAvailability(int id) {
