@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieExpress - Gourmet Food Delivery</title>
+    <meta name="description" content="Order premium gourmet food from the best restaurants. Fresh ingredients, expert preparation, fast delivery.">
+    <link rel="icon" type="image/svg+xml" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <h1>FoodieExpress</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#home" onclick="showSection('home')">Home</a></li>
+                    <li><a href="#menu" onclick="showSection('menu')">Menu</a></li>
+                    <li><a href="#add-items" onclick="showSection('add-items')">Add Items</a></li>
+                    <li><a href="#cart" onclick="showSection('cart')">Cart</a></li>
+                    <li><a href="#orders" onclick="showSection('orders')">My Orders</a></li>
+                    <li><a href="#about" onclick="showSection('about')">About</a></li>
+                    <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section-page active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Gourmet Cuisine Delivered Fresh</h2>
+                    <p>Experience exceptional flavors from our curated selection of premium dishes, crafted by expert chefs and delivered straight to your doorstep</p>
+                    <button class="cta-button" onclick="showSection('menu')">Explore Menu</button>
+                </div>
+            </div>
+
+            <!-- Featured Items Preview -->
+            <section class="featured-section">
+                <div class="container">
+                    <h2>Featured Dishes</h2>
+                    <div class="featured-grid" id="featuredGrid">
+                        <!-- Featured items will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="section-page menu-section">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Our Complete Menu</h2>
+                    <p>Discover our full range of gourmet dishes, carefully crafted with premium ingredients</p>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="category-filter">
+                    <button class="filter-btn active" onclick="filterMenu('all')">All Items</button>
+                    <button class="filter-btn" onclick="filterMenu('pizza')">Pizza</button>
+                    <button class="filter-btn" onclick="filterMenu('burger')">Burgers</button>
+                    <button class="filter-btn" onclick="filterMenu('pasta')">Pasta</button>
+                    <button class="filter-btn" onclick="filterMenu('dessert')">Desserts</button>
+                </div>
+
+                <!-- Menu Items -->
+                <div class="menu-grid" id="menuGrid">
+                    <!-- Menu items will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Items Section -->
+        <section id="add-items" class="section-page add-items-section">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Customize Your Order</h2>
+                    <p>Add items to your cart with custom options and preferences</p>
+                </div>
+
+                <div class="add-items-content">
+                    <!-- Quick Add Section -->
+                    <div class="quick-add-section">
+                        <h3><i class="fas fa-bolt"></i> Quick Add</h3>
+                        <p>Popular items ready to add to your cart</p>
+                        <div class="quick-add-grid" id="quickAddGrid">
+                            <!-- Quick add items will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Custom Item Builder -->
+                    <div class="custom-builder-section">
+                        <h3><i class="fas fa-tools"></i> Build Your Own</h3>
+                        <p>Create a custom item with your preferred ingredients</p>
+
+                        <div class="builder-container">
+                            <div class="builder-form">
+                                <div class="form-group">
+                                    <label for="itemType">Choose Base:</label>
+                                    <select id="itemType" onchange="updateCustomItem()">
+                                        <option value="">Select a base...</option>
+                                        <option value="pizza">Pizza Base - $12.99</option>
+                                        <option value="burger">Burger Base - $8.99</option>
+                                        <option value="pasta">Pasta Base - $10.99</option>
+                                        <option value="salad">Salad Base - $7.99</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Add Toppings/Ingredients:</label>
+                                    <div class="toppings-grid">
+                                        <div class="topping-item">
+                                            <input type="checkbox" id="cheese" value="2.50" onchange="updateCustomItem()">
+                                            <label for="cheese">Extra Cheese (+$2.50)</label>
+                                        </div>
+                                        <div class="topping-item">
+                                            <input type="checkbox" id="pepperoni" value="3.00" onchange="updateCustomItem()">
+                                            <label for="pepperoni">Pepperoni (+$3.00)</label>
+                                        </div>
+                                        <div class="topping-item">
+                                            <input type="checkbox" id="mushrooms" value="2.00" onchange="updateCustomItem()">
+                                            <label for="mushrooms">Mushrooms (+$2.00)</label>
+                                        </div>
+                                        <div class="topping-item">
+                                            <input type="checkbox" id="bacon" value="3.50" onchange="updateCustomItem()">
+                                            <label for="bacon">Bacon (+$3.50)</label>
+                                        </div>
+                                        <div class="topping-item">
+                                            <input type="checkbox" id="avocado" value="2.50" onchange="updateCustomItem()">
+                                            <label for="avocado">Avocado (+$2.50)</label>
+                                        </div>
+                                        <div class="topping-item">
+                                            <input type="checkbox" id="truffle" value="5.00" onchange="updateCustomItem()">
+                                            <label for="truffle">Truffle (+$5.00)</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="specialInstructions">Special Instructions:</label>
+                                    <textarea id="specialInstructions" placeholder="Any special requests or dietary requirements..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="quantity">Quantity:</label>
+                                    <div class="quantity-selector">
+                                        <button type="button" onclick="adjustCustomQuantity(-1)">-</button>
+                                        <input type="number" id="quantity" value="1" min="1" max="10" onchange="updateCustomItem()">
+                                        <button type="button" onclick="adjustCustomQuantity(1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="builder-preview">
+                                <div class="preview-card">
+                                    <h4>Your Custom Item</h4>
+                                    <div class="preview-content" id="customPreview">
+                                        <p>Select a base to start building your custom item</p>
+                                    </div>
+                                    <div class="preview-price">
+                                        <span>Total: $<span id="customPrice">0.00</span></span>
+                                    </div>
+                                    <button class="add-custom-btn" id="addCustomBtn" onclick="addCustomItem()" disabled>
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section id="cart" class="section-page cart-section">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Shopping Cart</h2>
+                    <p>Review your selected items and proceed to checkout</p>
+                </div>
+
+                <div class="cart-page-content">
+                    <!-- Cart Items List -->
+                    <div class="cart-page-items" id="cartPageItems">
+                        <!-- Cart items will be displayed here -->
+                    </div>
+
+                    <!-- Cart Summary -->
+                    <div class="cart-summary">
+                        <div class="summary-card">
+                            <h3>Order Summary</h3>
+                            <div class="summary-details">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="cartSubtotal">$0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Delivery Fee:</span>
+                                    <span id="deliveryFee">$3.99</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Tax:</span>
+                                    <span id="cartTax">$0.00</span>
+                                </div>
+                                <hr>
+                                <div class="summary-row total">
+                                    <span>Total:</span>
+                                    <span id="cartPageTotal">$0.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Delivery Options -->
+                            <div class="delivery-options">
+                                <h4>Delivery Options</h4>
+                                <div class="delivery-option">
+                                    <input type="radio" id="standard" name="delivery" value="standard" checked>
+                                    <label for="standard">
+                                        <span class="option-title">Standard Delivery</span>
+                                        <span class="option-time">30-45 mins</span>
+                                        <span class="option-price">$3.99</span>
+                                    </label>
+                                </div>
+                                <div class="delivery-option">
+                                    <input type="radio" id="express" name="delivery" value="express">
+                                    <label for="express">
+                                        <span class="option-title">Express Delivery</span>
+                                        <span class="option-time">15-25 mins</span>
+                                        <span class="option-price">$6.99</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="cart-actions">
+                                <button class="continue-shopping" onclick="showSection('menu')">
+                                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                                </button>
+                                <button class="checkout-btn-page" onclick="proceedToCheckout()">
+                                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: $<span id="cartTotal">0.00</span></strong>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+
+        <!-- Orders Section -->
+        <section id="orders" class="section-page orders-section">
+            <div class="container">
+                <div class="page-header">
+                    <h2>My Orders</h2>
+                    <p>Track your current orders and view your order history</p>
+                </div>
+
+                <!-- Current Orders -->
+                <div class="orders-container">
+                    <div class="order-category">
+                        <h3><i class="fas fa-clock"></i> Current Orders</h3>
+                        <div class="current-orders" id="currentOrders">
+                            <!-- Current orders will be displayed here -->
+                        </div>
+                    </div>
+
+                    <!-- Order History -->
+                    <div class="order-category">
+                        <h3><i class="fas fa-history"></i> Order History</h3>
+                        <div class="order-history" id="orderHistory">
+                            <!-- Order history will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section-page about-section">
+            <div class="container">
+                <div class="page-header">
+                    <h2>About FoodieExpress</h2>
+                    <p>Delivering exceptional culinary experiences since 2020</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>We're passionate about delivering exceptional culinary experiences from the finest restaurants and kitchens directly to your doorstep. Our platform connects you with premium ingredients, expert preparation, and seamless delivery service, ensuring every meal is a memorable experience that brings restaurant-quality dining to the comfort of your home.</p>
+
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <h4>50,000+</h4>
+                                <p>Happy Customers</p>
+                            </div>
+                            <div class="stat-item">
+                                <h4>500+</h4>
+                                <p>Partner Restaurants</p>
+                            </div>
+                            <div class="stat-item">
+                                <h4>30 min</h4>
+                                <p>Average Delivery</p>
+                            </div>
+                            <div class="stat-item">
+                                <h4>4.9★</h4>
+                                <p>Customer Rating</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section-page contact-section">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Contact Us</h2>
+                    <p>Get in touch with our customer support team</p>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Phone Support</h4>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Support</h4>
+                            <span>info@foodieexpress.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Main Office</h4>
+                            <span>123 Food Street, Delivery City, DC 12345</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: $<span id="cartTotal">0.00</span></strong>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 FoodieExpress. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
