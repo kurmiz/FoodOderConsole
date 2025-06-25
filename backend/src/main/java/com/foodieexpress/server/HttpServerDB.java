@@ -545,6 +545,13 @@ public class HttpServerDB {
         for (int i = 0; i < items.size(); i++) {
             if (i > 0) json.append(",");
             CartItem item = items.get(i);
+
+            // Skip items with null MenuItem (safety check)
+            if (item.getMenuItem() == null) {
+                System.out.println("⚠️ Warning: CartItem with null MenuItem found, skipping...");
+                continue;
+            }
+
             json.append("{");
             json.append("\"id\":").append(item.getMenuItem().getId()).append(",");
             json.append("\"name\":\"").append(escapeJson(item.getMenuItem().getName())).append("\",");

@@ -394,27 +394,14 @@ async function addToCart(itemId) {
         showNotification(`${item.name} added to cart! (Offline)`, 'warning');
     }
 
-    // Show feedback with improved animation
-    const button = event.target;
-    const originalText = button.textContent;
-    const originalBackground = button.style.background;
-
-    button.textContent = '✓ Added!';
-    button.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-    button.style.transform = 'scale(0.95)';
-
-    setTimeout(() => {
-        button.textContent = originalText;
-        button.style.background = originalBackground;
-        button.style.transform = 'scale(1)';
-    }, 1200);
-
     // Add subtle cart icon animation
     const cartIcon = document.querySelector('.cart-icon');
-    cartIcon.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-        cartIcon.style.transform = 'scale(1)';
-    }, 200);
+    if (cartIcon) {
+        cartIcon.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            cartIcon.style.transform = 'scale(1)';
+        }, 200);
+    }
 }
 
 // Backend cart operations
@@ -480,16 +467,16 @@ async function syncCartWithBackend() {
     try {
         showSyncActivity('Syncing cart...');
         const data = await apiCall('/cart');
-        if (data && data.items) {
+        if (data && data.items && Array.isArray(data.items)) {
             const backendCart = data.items.map(item => ({
                 id: item.id,
                 name: item.name,
-                description: item.description,
+                description: '', // Backend doesn't send description for cart items
                 price: item.price,
-                category: item.category,
-                image: item.image,
+                category: '', // Backend doesn't send category for cart items
+                image: item.imageUrl || '',
                 quantity: item.quantity,
-                instructions: item.instructions || ''
+                instructions: item.specialInstructions || ''
             }));
 
             // Only update if cart has changed
@@ -499,6 +486,14 @@ async function syncCartWithBackend() {
                 updateCartPageDisplay();
                 console.log('🔄 Cart synced with backend - Items:', cart.length);
                 showNotification(`Cart synced: ${cart.length} items`, 'info');
+            }
+        } else {
+            // Handle empty cart
+            if (cart.length > 0) {
+                cart = [];
+                updateCartDisplay();
+                updateCartPageDisplay();
+                console.log('🔄 Cart cleared - backend has no items');
             }
         }
     } catch (error) {

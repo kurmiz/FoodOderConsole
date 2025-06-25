@@ -140,13 +140,17 @@ public class CartServiceDB {
     // Clear entire cart
     public void clearCart(String customerId) {
         List<Map<String, Object>> cartItems = DatabaseManager.findByField(COLLECTION, "customerId", customerId);
-        
+
         for (Map<String, Object> item : cartItems) {
-            String cartItemId = item.get("_id").toString();
-            DatabaseManager.delete(COLLECTION, cartItemId);
+            Object idObj = item.get("id");
+            if (idObj != null) {
+                String cartItemId = idObj.toString();
+                DatabaseManager.delete(COLLECTION, cartItemId);
+                System.out.println("🗑️ Removed cart item ID: " + cartItemId);
+            }
         }
-        
-        System.out.println("🧹 Cleared cart for customer: " + customerId);
+
+        System.out.println("🧹 Cleared cart for customer: " + customerId + " (" + cartItems.size() + " items removed)");
     }
 
     // Get cart item count
