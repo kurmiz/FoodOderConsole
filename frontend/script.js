@@ -434,19 +434,23 @@ async function addToCartBackend(itemId, quantity, instructions = '') {
 async function loadCartFromBackend() {
     try {
         const data = await apiCall('/cart');
-        if (data && data.items) {
+        if (data && data.items && Array.isArray(data.items)) {
             // Convert backend cart format to frontend format
             cart = data.items.map(item => ({
                 id: item.id,
                 name: item.name,
-                description: item.description,
+                description: '', // Backend doesn't send description for cart items
                 price: item.price,
-                category: item.category,
-                image: item.image,
+                category: '', // Backend doesn't send category for cart items
+                image: item.imageUrl || '',
                 quantity: item.quantity,
-                instructions: item.instructions || ''
+                instructions: item.specialInstructions || ''
             }));
             console.log('✅ Cart loaded from backend:', cart.length, 'items');
+            return true;
+        } else {
+            console.log('📭 Empty cart from backend');
+            cart = [];
             return true;
         }
     } catch (error) {

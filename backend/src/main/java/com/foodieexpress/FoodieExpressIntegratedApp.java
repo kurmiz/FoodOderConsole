@@ -1,9 +1,10 @@
 package com.foodieexpress;
 
-import com.foodieexpress.server.HttpServer;
-import com.foodieexpress.service.CartService;
-import com.foodieexpress.service.MenuService;
-import com.foodieexpress.service.OrderService;
+import com.foodieexpress.server.HttpServerDB;
+import com.foodieexpress.service.MenuServiceDB;
+import com.foodieexpress.service.CartServiceDB;
+import com.foodieexpress.service.OrderServiceDB;
+import com.foodieexpress.database.DatabaseManager;
 import com.foodieexpress.model.MenuItem;
 import com.foodieexpress.model.Order;
 import com.foodieexpress.model.Order.OrderStatus;
@@ -17,21 +18,27 @@ import java.util.Scanner;
  * Integrated application that runs both web server and CLI
  */
 public class FoodieExpressIntegratedApp {
-    private final MenuService menuService;
-    private final CartService cartService;
-    private final OrderService orderService;
-    private final HttpServer webServer;
+    private final MenuServiceDB menuService;
+    private final CartServiceDB cartService;
+    private final OrderServiceDB orderService;
+    private final HttpServerDB webServer;
     private final Scanner scanner;
     private String currentCustomerId;
     private boolean serverRunning = false;
 
     public FoodieExpressIntegratedApp() throws IOException {
-        this.menuService = new MenuService();
-        this.cartService = new CartService(menuService);
-        this.orderService = new OrderService(cartService);
-        this.webServer = new HttpServer(8080, menuService, cartService, orderService);
+        // Initialize database first
+        DatabaseManager.initialize();
+
+        // Initialize services with database backing
+        this.menuService = new MenuServiceDB();
+        this.cartService = new CartServiceDB(menuService);
+        this.orderService = new OrderServiceDB(cartService);
+        this.webServer = new HttpServerDB(8080, menuService, cartService, orderService);
         this.scanner = new Scanner(System.in);
         this.currentCustomerId = "cli-customer-1";
+
+        System.out.println("🚀 FoodieExpress Integrated System initialized with real-time database!");
     }
 
     public static void main(String[] args) {

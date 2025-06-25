@@ -1,6 +1,7 @@
 package com.foodieexpress.service;
 
 import com.foodieexpress.model.MenuItem;
+import com.foodieexpress.database.DatabaseManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
